@@ -43,13 +43,33 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="assets\bullet.png">
+    <Media Include="assets\sound\enemy_explosion.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="assets\sound\player_explosion.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="assets\sound\shoot_sound.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="assets\sound\hyperspace_sound.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\sprites\bullet.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\ship_sprite_nothrust.png">
+    <Image Include="assets\sprites\enemy_sprite.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\ship_sprite_thrust.png">
+    <Image Include="assets\sprites\ship_hp_sprite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\sprites\ship_sprite_nothrust.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\sprites\ship_sprite_thrust.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
