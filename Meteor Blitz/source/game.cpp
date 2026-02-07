@@ -34,6 +34,7 @@ namespace meteor_blitz
 		projectilesystem.initialize();
 		enemysystem.initialize();
 		game_state = GameState::Start;
+		running = true;
 
 		//--- load sounds ---
 		put_in_coin_sound = LoadSound(put_in_coin_sound_path);
@@ -43,6 +44,26 @@ namespace meteor_blitz
 	bool Game::is_running() const {
 		return running;
 	}
+
+	void Game::end_game(){
+		//--- stop sounds ---
+		StopSound(put_in_coin_sound);
+		StopSound(player.player_explosion_sound);
+		StopSound(projectilesystem.shoot_sound);
+		StopSound(enemysystem.enemy_explosion_sound);
+
+		//--- unload sounds ---
+		UnloadSound(put_in_coin_sound);
+		UnloadSound(player.player_explosion_sound);
+		UnloadSound(projectilesystem.shoot_sound);
+		UnloadSound(enemysystem.enemy_explosion_sound);
+
+		//--- close all ---
+		CloseAudioDevice();
+		CloseWindow();
+	}
+
+	
 
 	void Game::reset_game() {
 		//--- Reset player position/state and restore lives & HUD ---
@@ -66,12 +87,7 @@ namespace meteor_blitz
 				game_state = GameState::Play;
 			}
 			else if (IsKeyPressed(KEY_Q)){
-				EndDrawing();
-				UnloadSound(player.player_explosion_sound);
-				UnloadSound(projectilesystem.shoot_sound);
-				UnloadSound(enemysystem.enemy_explosion_sound);
-				CloseAudioDevice();
-				WindowShouldClose();
+				running = false;
 			}
 		}
 		//--- Gameplay update ---
@@ -104,14 +120,7 @@ namespace meteor_blitz
 				game_state = GameState::Play;
 			}
 			else if (IsKeyPressed(KEY_Q)){
-				EndDrawing();
-				UnloadSound(player.player_explosion_sound);
-				UnloadSound(projectilesystem.shoot_sound);
-				UnloadSound(enemysystem.enemy_explosion_sound);
-				CloseAudioDevice();
-				WindowShouldClose();
-				
-
+				running = false;		
 			}
 		}
 	}

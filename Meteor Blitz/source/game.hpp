@@ -17,6 +17,7 @@ namespace meteor_blitz
 		//--- game functions ---
 		void initialize();
 		bool is_running() const;
+		void end_game();
 		void update(float dt);
 		void render();
 		int center_textX(const char* text, int fontSize);

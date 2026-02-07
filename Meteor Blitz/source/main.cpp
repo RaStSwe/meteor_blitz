@@ -8,6 +8,7 @@ using namespace meteor_blitz;
 int main(int argc, char** argv) {
 	//--Make a game instance--
 	Game game;
+	
 
 	//-Initialize everthing(window, player, etc)-
 	game.initialize();
@@ -17,7 +18,9 @@ int main(int argc, char** argv) {
 			game.update(deltaTime);
 			game.render();
 		}	
-	CloseWindow();
-	CloseAudioDevice();
+		
+		//--- clean up and ends game ---
+		game.end_game();
+
 	return 0;
 }
