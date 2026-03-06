@@ -12,10 +12,22 @@ namespace meteor_blitz
 		enemy_explosion_sound = LoadSound(enemy_explosion_sound_path);
 
 		//--- Initializing textures and the positions ---
+			//--- Small enemy ---
 		enemy_small_texture = LoadTexture(enemy_small_sprite_path);
 		enemy_small_sprite_source = { 0,0,enemy_sprite_small_sizeX,enemy_sprite_small_sizeY };
 		enemy_small_sprite_origin = { enemy_small_sprite_source.width / 2,enemy_small_sprite_source.height / 2 };
 		enemy_small_sprite_destination = { screen_size.width / 2,screen_size.height / 2,enemy_small_sprite_source.width,enemy_small_sprite_source.height };
+			//--- Medium enemy ---
+		enemy_medium_texture = LoadTexture(enemy_medium_sprite_path);
+		enemy_medium_sprite_source = { 0,0,enemy_sprite_medium_sizeX,enemy_sprite_medium_sizeY };
+		enemy_medium_sprite_origin = { enemy_medium_sprite_source.width / 2,enemy_medium_sprite_source.height / 2 };
+		enemy_medium_sprite_destination = { screen_size.width / 2,screen_size.height / 2,enemy_medium_sprite_source.width,enemy_medium_sprite_source.height };
+			//--- Large enemy ---
+		enemy_large_texture = LoadTexture(enemy_large_sprite_path);
+		enemy_large_sprite_source = { 0,0,enemy_sprite_large_sizeX,enemy_sprite_large_sizeY };
+		enemy_large_sprite_origin = { enemy_large_sprite_source.width / 2,enemy_large_sprite_source.height / 2 };
+		enemy_large_sprite_destination = { screen_size.width / 2,screen_size.height / 2,enemy_large_sprite_source.width,enemy_large_sprite_source.height };
+
 
 		//--- Enemy pool setup ---
 		enemy_pool.clear();
