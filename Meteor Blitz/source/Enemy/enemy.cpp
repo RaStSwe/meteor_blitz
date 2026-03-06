@@ -22,8 +22,8 @@ namespace meteor_blitz
 		enemy_pool.resize(enemies_per_wave);
 		std::for_each(enemy_pool.begin(), enemy_pool.end(), [&](Enemy& enemyInstance) {
 			enemyInstance.active = false;
-			enemyInstance.sprite_destination.width = enemy_sprite_source.width;
-			enemyInstance.sprite_destination.height = enemy_sprite_source.height;
+			enemyInstance.sprite_destination.width = enemy_small_sprite_source.width;
+			enemyInstance.sprite_destination.height = enemy_small_sprite_source.height;
 			enemyInstance.position = { 0, 0 };
 			enemyInstance.velocity = { 0, 0 };
 			});
@@ -128,8 +128,8 @@ namespace meteor_blitz
 		enemy_pool.resize(enemies_per_wave);
 		for (auto& enemyInstance : enemy_pool) {
 			enemyInstance.active = false;
-			enemyInstance.sprite_destination.width = enemy_sprite_source.width;
-			enemyInstance.sprite_destination.height = enemy_sprite_source.height;
+			enemyInstance.sprite_destination.width = enemy_small_sprite_source.width;
+			enemyInstance.sprite_destination.height = enemy_small_sprite_source.height;
 			enemyInstance.position = { 0, 0 };
 			enemyInstance.velocity = { 0, 0 };
 		}
@@ -147,8 +147,8 @@ namespace meteor_blitz
 			enemy_pool.resize(enemies_per_wave);
 			for (std::size_t i = oldSize; i < enemy_pool.size(); ++i) {
 				enemy_pool[i].active = false;
-				enemy_pool[i].sprite_destination.width = enemy_sprite_source.width;
-				enemy_pool[i].sprite_destination.height = enemy_sprite_source.height;
+				enemy_pool[i].sprite_destination.width = enemy_small_sprite_source.width;
+				enemy_pool[i].sprite_destination.height = enemy_small_sprite_source.height;
 				enemy_pool[i].position = { 0, 0 };
 				enemy_pool[i].velocity = { 0, 0 };
 			}
@@ -199,7 +199,7 @@ namespace meteor_blitz
 			enemy_warping(enemyInstance);	
 		}
 
-		//--- wave clear whooooo --- 
+		//--- wave clear whooooo ---
 		if (std::find_if(enemy_pool.begin(), enemy_pool.end(), [](const Enemy& enemy) { return enemy.active; }) == enemy_pool.end()) {
 			waveCount++;
 			newWave();
@@ -216,8 +216,8 @@ namespace meteor_blitz
 		enemy_pool.resize(enemies_per_wave);
 		for (std::size_t i = oldSize; i < enemy_pool.size(); ++i) {
 			enemy_pool[i].active = false;
-			enemy_pool[i].sprite_destination.width = enemy_sprite_source.width;
-			enemy_pool[i].sprite_destination.height = enemy_sprite_source.height;
+			enemy_pool[i].sprite_destination.width = enemy_small_sprite_source.width;
+			enemy_pool[i].sprite_destination.height = enemy_small_sprite_source.height;
 			enemy_pool[i].position = { 0, 0 };
 			enemy_pool[i].velocity = { 0, 0 };
 		}
@@ -232,8 +232,8 @@ namespace meteor_blitz
 
 			//--- checks as if the rectagle uses top-left coords fixes that projectiles sometimes dont register hits ---
 			Rectangle enemyRect = enemyInstance.sprite_destination;
-			enemyRect.x -= enemy_sprite_origin.x;
-			enemyRect.y -= enemy_sprite_origin.y;
+			enemyRect.x -= enemy_small_sprite_origin.x;
+			enemyRect.y -= enemy_small_sprite_origin.y;
 
 			for (auto& projInstance : projectiles.projectile_pool) {
 				if (!projInstance.active) continue;
@@ -258,7 +258,7 @@ namespace meteor_blitz
 		for (const auto& enemyInstance : enemy_pool) {
 			if (!enemyInstance.active) continue;
 			Color tint = (enemyInstance.type == EnemyType::Seeker) ? RED : WHITE;
-			DrawTexturePro(enemy_texture, enemy_sprite_source, enemyInstance.sprite_destination, enemy_sprite_origin, enemyInstance.rotation, tint);
+			DrawTexturePro(enemy_small_texture, enemy_small_sprite_source, enemyInstance.sprite_destination, enemy_small_sprite_origin, enemyInstance.rotation, tint);
 		}
 	}
 

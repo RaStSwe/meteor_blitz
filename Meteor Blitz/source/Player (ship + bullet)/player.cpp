@@ -73,8 +73,8 @@ namespace meteor_blitz
 			if (!enemyInstance.active) continue;
 
 			Rectangle enemyRect = enemyInstance.sprite_destination;
-			enemyRect.x -= enemies.enemy_sprite_origin.x;
-			enemyRect.y -= enemies.enemy_sprite_origin.y;
+			enemyRect.x -= enemies.enemy_small_sprite_origin.x;
+			enemyRect.y -= enemies.enemy_small_sprite_origin.y;
 
 			if (CheckCollisionRecs(playerRect, enemyRect)) {
 				// play hit sound if available
