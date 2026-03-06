@@ -60,7 +60,7 @@
     <Image Include="assets\sprites\bullet.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="assets\sprites\enemy_sprite.png">
+    <Image Include="assets\sprites\enemy_sprite_small.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\sprites\ship_hp_sprite.png">

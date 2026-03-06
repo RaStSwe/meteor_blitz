@@ -168,7 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\sprites\bullet.png" />
-    <Image Include="assets\sprites\enemy_sprite.png" />
+    <Image Include="assets\sprites\enemy_sprite_small.png" />
     <Image Include="assets\sprites\ship_hp_sprite.png" />
     <Image Include="assets\sprites\ship_sprite_nothrust.png" />
     <Image Include="assets\sprites\ship_sprite_thrust.png" />

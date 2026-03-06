@@ -12,10 +12,10 @@ namespace meteor_blitz
 		enemy_explosion_sound = LoadSound(enemy_explosion_sound_path);
 
 		//--- Initializing textures and the positions ---
-		enemy_texture = LoadTexture(enemy_sprite_path);
-		enemy_sprite_source = { 0,0,enemy_sprite_sizeX,enemy_sprite_sizeY };
-		enemy_sprite_origin = { enemy_sprite_source.width / 2,enemy_sprite_source.height / 2 };
-		enemy_sprite_destination = { screen_size.width / 2,screen_size.height / 2,enemy_sprite_source.width,enemy_sprite_source.height };
+		enemy_small_texture = LoadTexture(enemy_small_sprite_path);
+		enemy_small_sprite_source = { 0,0,enemy_sprite_small_sizeX,enemy_sprite_small_sizeY };
+		enemy_small_sprite_origin = { enemy_small_sprite_source.width / 2,enemy_small_sprite_source.height / 2 };
+		enemy_small_sprite_destination = { screen_size.width / 2,screen_size.height / 2,enemy_small_sprite_source.width,enemy_small_sprite_source.height };
 
 		//--- Enemy pool setup ---
 		enemy_pool.clear();
@@ -43,7 +43,7 @@ namespace meteor_blitz
 					enemyInstance.type = EnemyType::Seeker;
 				}
 				else {
-					enemyInstance.type = EnemyType::Basic;
+					enemyInstance.type = EnemyType::Small;
 				}
 
 				//--- Spawn position (top, bottom, left, or right) ---

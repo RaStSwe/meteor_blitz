@@ -9,7 +9,8 @@ namespace meteor_blitz
 	enum class GameState {
 		Start,
 		Play,
-		GAME_OVER
+		GAME_OVER,
+		Shop
 	};
 
 	class Game {

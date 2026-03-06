@@ -63,8 +63,6 @@ namespace meteor_blitz
 		CloseWindow();
 	}
 
-	
-
 	void Game::reset_game() {
 		//--- Reset player position/state and restore lives & HUD ---
 		player.reset();
@@ -90,6 +88,7 @@ namespace meteor_blitz
 				running = false;
 			}
 		}
+		
 		//--- Gameplay update ---
 		else if(game_state == GameState::Play){
 			//--- player update & collision check ---
@@ -105,7 +104,13 @@ namespace meteor_blitz
 				player.player_sprite_destination.y + player.player_sprite_origin.y }; 
 			enemysystem.update(deltaTime, playerPos);
 			enemysystem.checkCollisions(projectilesystem);
-		}		
+		}
+		
+		//--- shop update ---
+		else if(game_state == GameState::Shop) {
+				
+		}
+
 		//--- Game over update ---
 		else if (game_state == GameState::GAME_OVER) {
 			if (IsKeyPressed(KEY_ENTER)) {
@@ -115,7 +120,7 @@ namespace meteor_blitz
 			}
 			if(IsKeyPressed(KEY_SPACE) && coin > 0 ) {
 				coin -= 1;
-				WaitTime(0.2f); // give some time to reset
+				WaitTime(0.2f); 
 				reset_game();
 				game_state = GameState::Play;
 			}
@@ -135,6 +140,7 @@ namespace meteor_blitz
 		BeginDrawing();
 			ClearBackground(BLACK);
 			
+			//--- Start screen render ---
 			if(game_state == GameState::Start){
 				DrawText("-Meteor Blitz-", (center_textX("-Meteor Blitz-", 100)), 300, 100, RAYWHITE);
 				DrawText("-By RaStSwe-", (center_textX("-By RaStSwe-", 50)), 410, 50, RAYWHITE);
@@ -146,6 +152,7 @@ namespace meteor_blitz
 				DrawText("1 coin 1 Play", (center_textX("1 coin 1 Play", 20)), 1200, 20, RAYWHITE);
 				DrawText(TextFormat("Coins - %d", coin), (center_textX(TextFormat("Coins - %d", coin), 20)), 1230, 20, RAYWHITE);
 			}
+			//--- Gameplay render ---
 			else if(game_state == GameState::Play){				
 				DrawText(TextFormat("Wave: %d", enemysystem.waveCount), 10, 10, 40, RAYWHITE);
 				player.render();
@@ -153,6 +160,11 @@ namespace meteor_blitz
  				projectilesystem.render();
  				enemysystem.render();
 			}
+			//--- Shop render ---
+			else if (game_state == GameState::Shop) {
+
+			}
+			//--- Game over render ---
 			else if(game_state == GameState::GAME_OVER){
 				DrawText("-GAME OVER-", center_textX("-GAME OVER-", 100), 300, 100, RAYWHITE);
 				DrawText("-Press space to start-", center_textX("-Press space to start-", 30), 700, 30, RAYWHITE);

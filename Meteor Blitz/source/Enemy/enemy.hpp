@@ -8,13 +8,15 @@
 namespace meteor_blitz
 {	
 	enum class EnemyType {
-		Basic = 0,
-		Seeker = 1
+		Small = 0,
+		Medium = 1,
+		Large = 2,
+		Seeker = 3
 	};
 
 	struct Enemy {
 		bool active = false;
-		EnemyType type = EnemyType::Basic;
+		EnemyType type = EnemyType::Small;
 		Vector2 position = { 0,0 };
 		Vector2 velocity = { 0,0 };
 		Rectangle sprite_destination = { 0,0,0,0 };
@@ -34,15 +36,31 @@ namespace meteor_blitz
 		void initialize();
 
 		//--- Enemy texture stuff ---
-		const char* enemy_sprite_path = "assets/sprites/enemy_sprite.png";
-		static constexpr float enemy_sprite_sizeX = 64.0f;
-		static constexpr float enemy_sprite_sizeY = 64.0f;
-
-		Texture2D enemy_texture = {};
-		Rectangle enemy_sprite_source = {};
-		Vector2 enemy_sprite_origin = {};
-		Rectangle enemy_sprite_destination = {};
-
+			//--- small enemy ---
+		const char* enemy_small_sprite_path = "assets/sprites/enemy_sprite_small.png";
+		static constexpr float enemy_sprite_small_sizeX = 64.0f;
+		static constexpr float enemy_sprite_small_sizeY = 64.0f;
+		Texture2D enemy_small_texture = {};
+		Rectangle enemy_small_sprite_source = {};
+		Vector2 enemy_small_sprite_origin = {};
+		Rectangle enemy_small_sprite_destination = {};
+			//--- medium enemy ---
+		const char* enemy_medium_sprite_path = "assets/sprites/enemy_sprite_medium.png";
+		static constexpr float enemy_sprite_medium_sizeX = 96.0f;
+		static constexpr float enemy_sprite_medium_sizeY = 96.0f;
+		Texture2D enemy_medium_texture = {};
+		Rectangle enemy_medium_sprite_source = {};
+		Vector2 enemy_medium_sprite_origin = {};
+		Rectangle enemy_medium_sprite_destination = {};
+			//--- large enemy ---
+		const char* enemy_large_sprite_path = "assets/sprites/enemy_sprite_large.png";
+		static constexpr float enemy_sprite_large_sizeX = 128.0f;
+		static constexpr float enemy_sprite_large_sizeY = 128.0f;
+		Texture2D enemy_large_texture = {};
+		Rectangle enemy_large_sprite_source = {};
+		Vector2 enemy_large_sprite_origin = {};
+		Rectangle enemy_large_sprite_destination = {};
+		
 		//--- Enemty stats ---
 		float enemy_speed = 100.0f; //enemy speed
 		static constexpr int seeker_wave_start = 5; //new seeker enemy type starts spawning 
@@ -53,8 +71,7 @@ namespace meteor_blitz
 		void spawn_enemyWave();
 		void enemy_warping(Enemy& enemy) const;
 		void checkCollisions(ProjectileSystem& projectile);
-		// Restart the current wave if player got hit
-		void restart_wave();
+		
 
 		//--- Wave stats & stuff ---
 		std::vector<Enemy> enemy_pool;
@@ -64,6 +81,7 @@ namespace meteor_blitz
 
 		//--- Wave funtions ---
 		void newWave();
+		void restart_wave();
 
 		//--- Update & render ---
 		void update(float deltaTime, const Vector2& playerPos);
