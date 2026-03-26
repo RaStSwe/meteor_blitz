@@ -35,7 +35,8 @@ namespace meteor_blitz
 		//--- Initialize enemy ---
 		void initialize();
 
-		//--- Enemy texture stuff ---
+		
+		//--- Enemies ---
 			//--- small enemy ---
 		const char* enemy_small_sprite_path = "assets/sprites/enemy_sprite_small.png";
 		static constexpr float enemy_sprite_small_sizeX = 64.0f;
@@ -46,6 +47,8 @@ namespace meteor_blitz
 		Rectangle enemy_small_sprite_destination = {};
 			//--- medium enemy ---
 		const char* enemy_medium_sprite_path = "assets/sprites/enemy_sprite_medium.png";
+		static constexpr int startWave_Medium = 5; //medium enemy starts spawning at wave 5
+		static constexpr int medium_spawn_chance = 30; //30% for each new enemy to be medium starting from wave 5
 		static constexpr float enemy_sprite_medium_sizeX = 96.0f;
 		static constexpr float enemy_sprite_medium_sizeY = 96.0f;
 		Texture2D enemy_medium_texture = {};
@@ -54,22 +57,29 @@ namespace meteor_blitz
 		Rectangle enemy_medium_sprite_destination = {};
 			//--- large enemy ---
 		const char* enemy_large_sprite_path = "assets/sprites/enemy_sprite_large.png";
+		static constexpr int startWave_Large = 10; //large enemy starts spawning at wave 10
+		static constexpr int large_spawn_chance = 15; //15% for each new enemy to be large starting from wave 10
 		static constexpr float enemy_sprite_large_sizeX = 128.0f;
 		static constexpr float enemy_sprite_large_sizeY = 128.0f;
 		Texture2D enemy_large_texture = {};
 		Rectangle enemy_large_sprite_source = {};
 		Vector2 enemy_large_sprite_origin = {};
-		Rectangle enemy_large_sprite_destination = {};
-		
-		//--- Enemty stats ---
-		float enemy_speed = 100.0f; //enemy speed
-		static constexpr int seeker_wave_start = 5; //new seeker enemy type starts spawning 
-		static constexpr int seeker_spawn_chance = 30; //30% for each basic enemy to be a seeker
+		Rectangle enemy_large_sprite_destination = {};		
+			//--- Seeker enemy (uses small enemy sprite size) ---
+		static constexpr int startWave_Seeker = 15; //new seeker enemy type starts spawning 
+		static constexpr int seeker_spawn_chance = 10; //10% for each basic enemy to be a seeker
 
-		//--- ememy functions ---
+
+
+		//--- Enemy stats ---
+		float enemy_speed = 100.0f; //enemy speed
+
+
+		//--- Enemy functions ---
 		void reset();
 		void spawn_enemyWave();
 		void enemy_warping(Enemy& enemy) const;
+		void enemy_splitting(Enemy& enemy) const;
 		void checkCollisions(ProjectileSystem& projectile);
 		
 
@@ -81,6 +91,7 @@ namespace meteor_blitz
 
 		//--- Wave funtions ---
 		void newWave();
+		void isWaveCleared();
 		void restart_wave();
 
 		//--- Update & render ---

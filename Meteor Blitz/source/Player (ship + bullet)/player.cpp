@@ -71,12 +71,30 @@ namespace meteor_blitz
 
 		for (auto& enemyInstance : enemies.enemy_pool) {
 			if (!enemyInstance.active) continue;
+			
+			//--- Enemy Rectangles for collision checks ---
+			Rectangle enemyRectSmall = { 0, 0, 0, 0 };
+			Rectangle enemyRectMedium = { 0, 0, 0, 0 };
+			Rectangle enemyRectLarge = { 0, 0, 0, 0 };
 
-			Rectangle enemyRect = enemyInstance.sprite_destination;
-			enemyRect.x -= enemies.enemy_small_sprite_origin.x;
-			enemyRect.y -= enemies.enemy_small_sprite_origin.y;
+			if (enemyInstance.type == EnemyType::Small || enemyInstance.type == EnemyType::Seeker) {
+				enemyRectSmall = enemyInstance.sprite_destination;
+				enemyRectSmall.x -= enemies.enemy_small_sprite_origin.x;
+				enemyRectSmall.y -= enemies.enemy_small_sprite_origin.y;
+			}
+			else if (enemyInstance.type == EnemyType::Medium) {
+				enemyRectMedium = enemyInstance.sprite_destination;
+				enemyRectMedium.x -= enemies.enemy_medium_sprite_origin.x;
+				enemyRectMedium.y -= enemies.enemy_medium_sprite_origin.y;
+			}
+			else { //enemyInstance.type == EnemyType::Large
+				enemyRectLarge = enemyInstance.sprite_destination;
+				enemyRectLarge.x -= enemies.enemy_large_sprite_origin.x;
+				enemyRectLarge.y -= enemies.enemy_large_sprite_origin.y;
+			}
 
-			if (CheckCollisionRecs(playerRect, enemyRect)) {
+
+			if (CheckCollisionRecs(playerRect, enemyRectSmall) || CheckCollisionRecs(playerRect, enemyRectMedium) || CheckCollisionRecs(playerRect, enemyRectLarge)) {
 				// play hit sound if available
 				PlaySound(player_explosion_sound);
 
@@ -118,7 +136,7 @@ namespace meteor_blitz
 		}
 
 		//--- Player forward movement + sound ---
-		if(IsKeyReleased(KEY_K) || IsKeyPressed(KEY_K)) PlaySound(shipthrust_sound);
+		if(IsKeyPressed(KEY_K)) PlaySound(shipthrust_sound);
 		if (IsKeyDown(KEY_K)) {
 			float rad = DEG2RAD * player_rotation;
 			player_velocity.x += std::cos(rad) * player_acceleration * deltaTime;

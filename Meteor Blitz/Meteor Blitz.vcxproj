@@ -161,13 +161,18 @@
     <ClInclude Include="source\Player %28ship + bullet%29\player.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Media Include="assets\sound\coin.wav" />
     <Media Include="assets\sound\enemy_explosion.wav" />
     <Media Include="assets\sound\hyperspace_sound.wav" />
     <Media Include="assets\sound\player_explosion.wav" />
     <Media Include="assets\sound\shoot_sound.wav" />
+    <Media Include="assets\sound\thrust_sound.wav" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\sprites\bullet.png" />
+    <Image Include="assets\sprites\enemy_sprite _medium.png" />
+    <Image Include="assets\sprites\enemy_sprite_large.png" />
+    <Image Include="assets\sprites\enemy_sprite_medium.png" />
     <Image Include="assets\sprites\enemy_sprite_small.png" />
     <Image Include="assets\sprites\ship_hp_sprite.png" />
     <Image Include="assets\sprites\ship_sprite_nothrust.png" />

@@ -51,39 +51,114 @@ namespace meteor_blitz
 				enemyInstance.active = true;
 
 				//--- Determine enemy type ---
-				if(waveCount >= seeker_wave_start && GetRandomValue(1, 100) <= seeker_spawn_chance){
+				if (waveCount >= startWave_Medium && GetRandomValue(1, 100) <= medium_spawn_chance) {
+					enemyInstance.type = EnemyType::Medium;
+				}
+				else if (waveCount >= startWave_Large && GetRandomValue(1, 100) <= large_spawn_chance) {
+					enemyInstance.type = EnemyType::Large;
+				}
+				else if (waveCount >= startWave_Seeker && GetRandomValue(1, 100) <= seeker_spawn_chance) {
 					enemyInstance.type = EnemyType::Seeker;
 				}
 				else {
 					enemyInstance.type = EnemyType::Small;
 				}
+				
+				//--- Set correct size based on enemy type ---
+				if (enemyInstance.type == EnemyType::Medium) {
+					enemyInstance.sprite_destination.width = enemy_medium_sprite_source.width;
+					enemyInstance.sprite_destination.height = enemy_medium_sprite_source.height;
+				}
+				else if (enemyInstance.type == EnemyType::Large) {
+					enemyInstance.sprite_destination.width = enemy_large_sprite_source.width;
+					enemyInstance.sprite_destination.height = enemy_large_sprite_source.height;
+				}
+				else { // Small + Seeker (seeker uses small sprite)
+					enemyInstance.sprite_destination.width = enemy_small_sprite_source.width;
+					enemyInstance.sprite_destination.height = enemy_small_sprite_source.height;
+				}
 
 				//--- Spawn position (top, bottom, left, or right) ---
 				int side = GetRandomValue(0, 3);
 
-				// top
-				if (side == 0) {
-					int spawnX = GetRandomValue(0, (int)screen_size.width);
-					enemyInstance.position.x = static_cast<float>(spawnX);
-					enemyInstance.position.y = -enemyInstance.sprite_destination.height - 10.0f;
+				//--- Small & Seeker enemy spawn ---
+				if (enemyInstance.type == EnemyType::Small || enemyInstance.type == EnemyType::Seeker){
+					// top
+					if (side == 0) {
+						int spawnX = GetRandomValue(0, (int)screen_size.width);
+						enemyInstance.position.x = static_cast<float>(spawnX);
+						enemyInstance.position.y = -enemyInstance.sprite_destination.height - 10.0f;
+					}
+					// bottom
+					else if (side == 1) {
+						int spawnX = GetRandomValue(0, (int)screen_size.width);
+						enemyInstance.position.x = static_cast<float>(spawnX);
+						enemyInstance.position.y = screen_size.height + enemyInstance.sprite_destination.height + 10.0f;
+					}
+					// left
+					else if (side == 2) {
+						int spawnY = GetRandomValue(0, (int)screen_size.height);
+						enemyInstance.position.x = -enemyInstance.sprite_destination.width - 10.0f;
+						enemyInstance.position.y = static_cast<float>(spawnY);
+					}
+					// right
+					else { // aka side == 3
+						int spawnY = GetRandomValue(0, (int)screen_size.height);
+						enemyInstance.position.x = screen_size.width + enemyInstance.sprite_destination.width + 10.0f;
+						enemyInstance.position.y = static_cast<float>(spawnY);
+						}
 				}
-				// bottom
-				else if (side == 1) {
-					int spawnX = GetRandomValue(0, (int)screen_size.width);
-					enemyInstance.position.x = static_cast<float>(spawnX);
-					enemyInstance.position.y = screen_size.height + enemyInstance.sprite_destination.height + 10.0f;
+				//--- Medium enemy spawn ---
+				if(enemyInstance.type == EnemyType::Medium) {
+					if (side == 0) {
+						int spawnX = GetRandomValue(0, (int)screen_size.width);
+						enemyInstance.position.x = static_cast<float>(spawnX);
+						enemyInstance.position.y = -enemyInstance.sprite_destination.height - 10.0f;
+					}
+					// bottom
+					else if (side == 1) {
+						int spawnX = GetRandomValue(0, (int)screen_size.width);
+						enemyInstance.position.x = static_cast<float>(spawnX);
+						enemyInstance.position.y = screen_size.height + enemyInstance.sprite_destination.height + 10.0f;
+					}
+					// left
+					else if (side == 2) {
+						int spawnY = GetRandomValue(0, (int)screen_size.height);
+						enemyInstance.position.x = -enemyInstance.sprite_destination.width - 10.0f;
+						enemyInstance.position.y = static_cast<float>(spawnY);
+					}
+					// right
+					else { // aka side == 3
+						int spawnY = GetRandomValue(0, (int)screen_size.height);
+						enemyInstance.position.x = screen_size.width + enemyInstance.sprite_destination.width + 10.0f;
+						enemyInstance.position.y = static_cast<float>(spawnY);
+					}
 				}
-				// left
-				else if (side == 2) {
-					int spawnY = GetRandomValue(0, (int)screen_size.height);
-					enemyInstance.position.x = -enemyInstance.sprite_destination.width - 10.0f;
-					enemyInstance.position.y = static_cast<float>(spawnY);
-				}
-				// right
-				else { // aka side == 3
-					int spawnY = GetRandomValue(0, (int)screen_size.height);
-					enemyInstance.position.x = screen_size.width + enemyInstance.sprite_destination.width + 10.0f;
-					enemyInstance.position.y = static_cast<float>(spawnY);
+				//--- Large enemy spawn ---
+				if(enemyInstance.type == EnemyType::Large) {
+					if (side == 0) {
+						int spawnX = GetRandomValue(0, (int)screen_size.width);
+						enemyInstance.position.x = static_cast<float>(spawnX);
+						enemyInstance.position.y = -enemyInstance.sprite_destination.height - 10.0f;
+					}
+					// bottom
+					else if (side == 1) {
+						int spawnX = GetRandomValue(0, (int)screen_size.width);
+						enemyInstance.position.x = static_cast<float>(spawnX);
+						enemyInstance.position.y = screen_size.height + enemyInstance.sprite_destination.height + 10.0f;
+					}
+					// left
+					else if (side == 2) {
+						int spawnY = GetRandomValue(0, (int)screen_size.height);
+						enemyInstance.position.x = -enemyInstance.sprite_destination.width - 10.0f;
+						enemyInstance.position.y = static_cast<float>(spawnY);
+					}
+					// right
+					else { // aka side == 3
+						int spawnY = GetRandomValue(0, (int)screen_size.height);
+						enemyInstance.position.x = screen_size.width + enemyInstance.sprite_destination.width + 10.0f;
+						enemyInstance.position.y = static_cast<float>(spawnY);
+					}
 				}
 
 				if (enemyInstance.type == EnemyType::Seeker) {
@@ -133,6 +208,10 @@ namespace meteor_blitz
 			enemy.position.y = screen_size.height - enemy.sprite_destination.height / 2;
 	}
 
+	void EnemySystem::enemy_splitting(Enemy& enemy) const {
+
+	}
+
 	void EnemySystem::reset() {
 		//-- - Clear and make a new enemy pool ---
 		enemy_pool.clear();
@@ -180,38 +259,8 @@ namespace meteor_blitz
 		spawn_enemyWave();
 	}
 
-	void EnemySystem::update(float deltaTime, const Vector2& playerPos) {
-		//--- Update all enemies in the pool ---
-		for (auto& enemyInstance : enemy_pool) {
-			if (!enemyInstance.active) continue;
-
-			//--- Seeker enemy seeking behavior ---
-			if (enemyInstance.type == EnemyType::Seeker) {
-				Vector2 dir{ playerPos.x - enemyInstance.position.x, playerPos.y - enemyInstance.position.y };
-				float len = std::sqrt(dir.x * dir.x + dir.y * dir.y);
-				if (len > 0.0001f) {
-					dir.x /= len;
-					dir.y /= len;
-					float speed = enemy_speed;
-					enemyInstance.velocity.x = dir.x * speed;
-					enemyInstance.velocity.y = dir.y * speed;
-				}
-			}
-
-			//--- Move by velocity ---
-			enemyInstance.position.x += enemyInstance.velocity.x * deltaTime;
-			enemyInstance.position.y += enemyInstance.velocity.y * deltaTime;
-
-			//--- Update destination rectangle ---
-			enemyInstance.sprite_destination.x = enemyInstance.position.x;
-			enemyInstance.sprite_destination.y = enemyInstance.position.y;
-
-			enemyInstance.rotation += 90.0f * deltaTime; // Rotate enemy for visual effect
-
-			enemy_warping(enemyInstance);	
-		}
-
-		//--- wave clear whooooo ---
+	void EnemySystem::isWaveCleared() {
+		//--- checks if any active enemies remain ---
 		if (std::find_if(enemy_pool.begin(), enemy_pool.end(), [](const Enemy& enemy) { return enemy.active; }) == enemy_pool.end()) {
 			waveCount++;
 			newWave();
@@ -241,11 +290,27 @@ namespace meteor_blitz
 	void EnemySystem::checkCollisions(ProjectileSystem& projectiles) {
 		for (auto& enemyInstance : enemy_pool) {
 			if (!enemyInstance.active) continue;
-
-			//--- checks as if the rectagle uses top-left coords fixes that projectiles sometimes dont register hits ---
-			Rectangle enemyRect = enemyInstance.sprite_destination;
-			enemyRect.x -= enemy_small_sprite_origin.x;
-			enemyRect.y -= enemy_small_sprite_origin.y;
+		
+			//--- Enemy Rectangles for collision checks ---
+			Rectangle enemyRectSmall = { 0, 0, 0, 0 };
+			Rectangle enemyRectMedium = { 0, 0, 0, 0 };
+			Rectangle enemyRectLarge = { 0, 0, 0, 0 };
+        
+			if (enemyInstance.type == EnemyType::Small || enemyInstance.type == EnemyType::Seeker) {
+				enemyRectSmall = enemyInstance.sprite_destination;
+				enemyRectSmall.x -= enemy_small_sprite_origin.x;
+				enemyRectSmall.y -= enemy_small_sprite_origin.y;
+			}
+			else if (enemyInstance.type == EnemyType::Medium) {
+				enemyRectMedium = enemyInstance.sprite_destination;
+				enemyRectMedium.x -= enemy_medium_sprite_origin.x;
+				enemyRectMedium.y -= enemy_medium_sprite_origin.y;
+			}
+			else { // enemyInstance.type == EnemyType::Large
+				enemyRectLarge = enemyInstance.sprite_destination;
+				enemyRectLarge.x -= enemy_large_sprite_origin.x;
+				enemyRectLarge.y -= enemy_large_sprite_origin.y;
+			}
 
 			for (auto& projInstance : projectiles.projectile_pool) {
 				if (!projInstance.active) continue;
@@ -255,7 +320,18 @@ namespace meteor_blitz
 				projRect.x -= projectiles.projectile_sprite_origin.x;
 				projRect.y -= projectiles.projectile_sprite_origin.y;
 
-				if (CheckCollisionRecs(enemyRect, projRect)) {
+				bool collision = false;
+				if (enemyInstance.type == EnemyType::Small || enemyInstance.type == EnemyType::Seeker) {
+					collision = CheckCollisionRecs(enemyRectSmall, projRect);
+				} 
+				else if (enemyInstance.type == EnemyType::Medium) {
+					collision = CheckCollisionRecs(enemyRectMedium, projRect);
+				}
+				else { // enemyInstance.type == EnemyType::Large
+					collision = CheckCollisionRecs(enemyRectLarge, projRect);
+				}
+
+				if (collision) {
 					enemyInstance.active = false;
 					projInstance.active = false;
 					PlaySound(enemy_explosion_sound);
@@ -263,14 +339,59 @@ namespace meteor_blitz
 				}
 			}
 		}
+	}	
+
+	void EnemySystem::update(float deltaTime, const Vector2& playerPos) {
+		//--- Update all enemies in the pool ---
+		for (auto& enemyInstance : enemy_pool) {
+			if (!enemyInstance.active) continue;
+
+			//--- Seeker enemy seeking behavior ---
+			if (enemyInstance.type == EnemyType::Seeker) {
+				Vector2 dir{ playerPos.x - enemyInstance.position.x, playerPos.y - enemyInstance.position.y };
+				float len = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+				if (len > 0.0001f) {
+					dir.x /= len;
+					dir.y /= len;
+					float speed = enemy_speed;
+					enemyInstance.velocity.x = dir.x * speed;
+					enemyInstance.velocity.y = dir.y * speed;
+				}
+			}
+
+			//--- Move by velocity ---
+			enemyInstance.position.x += enemyInstance.velocity.x * deltaTime;
+			enemyInstance.position.y += enemyInstance.velocity.y * deltaTime;
+
+			//--- Update destination rectangle ---
+			enemyInstance.sprite_destination.x = enemyInstance.position.x;
+			enemyInstance.sprite_destination.y = enemyInstance.position.y;
+
+			enemyInstance.rotation += 90.0f * deltaTime; // Rotate enemy for visual effect
+
+			enemy_warping(enemyInstance);
+		}
+
+		//---check if is wave is cleared whooooo ---
+		isWaveCleared();
 	}
 
 	void EnemySystem::render() const {
 		//--- Draw all active enemies ---
 		for (const auto& enemyInstance : enemy_pool) {
 			if (!enemyInstance.active) continue;
+			
 			Color tint = (enemyInstance.type == EnemyType::Seeker) ? RED : WHITE;
-			DrawTexturePro(enemy_small_texture, enemy_small_sprite_source, enemyInstance.sprite_destination, enemy_small_sprite_origin, enemyInstance.rotation, tint);
+			
+			if (enemyInstance.type == EnemyType::Medium) {
+				DrawTexturePro(enemy_medium_texture, enemy_medium_sprite_source, enemyInstance.sprite_destination, enemy_medium_sprite_origin, enemyInstance.rotation, tint);
+			}
+			else if (enemyInstance.type == EnemyType::Large) {
+				DrawTexturePro(enemy_large_texture, enemy_large_sprite_source, enemyInstance.sprite_destination, enemy_large_sprite_origin, enemyInstance.rotation, tint);
+			}			
+			else{
+				DrawTexturePro(enemy_small_texture, enemy_small_sprite_source, enemyInstance.sprite_destination, enemy_small_sprite_origin, enemyInstance.rotation, tint);
+			}			
 		}
 	}
 

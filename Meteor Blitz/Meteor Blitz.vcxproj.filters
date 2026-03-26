@@ -55,6 +55,12 @@
     <Media Include="assets\sound\hyperspace_sound.wav">
       <Filter>Resource Files</Filter>
     </Media>
+    <Media Include="assets\sound\thrust_sound.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="assets\sound\coin.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\sprites\bullet.png">
@@ -70,6 +76,15 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="assets\sprites\ship_sprite_thrust.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\sprites\enemy_sprite _medium.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\sprites\enemy_sprite_large.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="assets\sprites\enemy_sprite_medium.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
