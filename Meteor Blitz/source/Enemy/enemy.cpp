@@ -31,7 +31,8 @@ namespace meteor_blitz
 
 		//--- Enemy pool setup ---
 		enemy_pool.clear();
-		enemy_pool.resize(enemies_per_wave);
+		enemy_pool.resize(max_enemy_pool_size);
+
 		std::for_each(enemy_pool.begin(), enemy_pool.end(), [&](Enemy& enemyInstance) {
 			enemyInstance.active = false;
 			enemyInstance.sprite_destination.width = enemy_small_sprite_source.width;
@@ -46,9 +47,16 @@ namespace meteor_blitz
 
 	void EnemySystem::spawn_enemyWave() {
 
+		int spawned = 0;
+
 		for (auto& enemyInstance : enemy_pool) {
+			if (spawned >= enemies_per_wave) {
+				break;
+			}
+
 			if (!enemyInstance.active) {
 				enemyInstance.active = true;
+				++spawned;
 
 				//--- Determine enemy type ---
 				if (waveCount >= startWave_Medium && GetRandomValue(1, 100) <= medium_spawn_chance) {
@@ -209,45 +217,88 @@ namespace meteor_blitz
 			enemy.position.y = screen_size.height - enemy.sprite_destination.height / 2;
 	}
 
-	void EnemySystem::enemy_splitting(Enemy& enemy) const {
-		// splitting disabled (reverted)
-		(void)enemy;
+	void EnemySystem::enemy_splitting(Enemy& enemy, EnemyType type) {
+
+		auto acquire_slot = [&]() -> Enemy* {
+			auto it = std::find_if(enemy_pool.begin(), enemy_pool.end(),
+				[](const Enemy& e) { return !e.active; });
+
+			if (it == enemy_pool.end()) {
+				return nullptr;
+			}
+
+			return &(*it);
+		};
+
+		auto spawn_child = [&](EnemyType childType, float childWidth, float childHeight) -> bool {
+			Enemy* slot = acquire_slot();
+			if (slot == nullptr) {
+				return false;
+			}
+
+			Enemy& child = *slot;
+			child.active = true;
+			child.type = childType;
+			child.position = enemy.position;
+
+			const float angleInRad = DEG2RAD * static_cast<float>(GetRandomValue(0, 359));
+			child.velocity.x = std::cos(angleInRad) * enemy_speed;
+			child.velocity.y = std::sin(angleInRad) * enemy_speed;
+
+			child.sprite_destination.width = childWidth;
+			child.sprite_destination.height = childHeight;
+			child.sprite_destination.x = enemy.position.x;
+			child.sprite_destination.y = enemy.position.y;
+
+			child.rotation = static_cast<float>(GetRandomValue(0, 359));
+			return true;
+		};
+
+		if (type == EnemyType::Large) {
+			for (int i = 0; i < 2; ++i) {
+				if (!spawn_child(EnemyType::Medium, enemy_medium_sprite_source.width, enemy_medium_sprite_source.height)) {
+					break;
+				}
+			}
+			return;
+		}
+
+		if (type == EnemyType::Medium) {
+			for (int i = 0; i < 2; ++i) {
+				if (!spawn_child(EnemyType::Small, enemy_small_sprite_source.width, enemy_small_sprite_source.height)) {
+					break;
+				}
+			}
+			return;
+		}
+
+
 	}
 
 	void EnemySystem::reset() {
-		//-- - Clear and make a new enemy pool ---
 		enemy_pool.clear();
+
 		enemies_per_wave = 1;
-		enemy_pool.resize(enemies_per_wave);
+		enemy_pool.resize(max_enemy_pool_size);
+
 		for (auto& enemyInstance : enemy_pool) {
 			enemyInstance.active = false;
 			enemyInstance.sprite_destination.width = enemy_small_sprite_source.width;
 			enemyInstance.sprite_destination.height = enemy_small_sprite_source.height;
 			enemyInstance.position = { 0, 0 };
 			enemyInstance.velocity = { 0, 0 };
+			enemyInstance.sprite_destination.x = 0;
+			enemyInstance.sprite_destination.y = 0;
+			enemyInstance.rotation = 0.0f;
 		}
+
 		enemy_speed = 100.0f;
 		waveCount = 1;
 
-		//--- spawn in the first wave ---
 		spawn_enemyWave();
 	}
 
 	void EnemySystem::restart_wave() {
-		// Ensure pool size matches current enemies_per_wave
-		if (enemy_pool.size() != static_cast<std::size_t>(enemies_per_wave)) {
-			std::size_t oldSize = enemy_pool.size();
-			enemy_pool.resize(enemies_per_wave);
-			for (std::size_t i = oldSize; i < enemy_pool.size(); ++i) {
-				enemy_pool[i].active = false;
-				enemy_pool[i].sprite_destination.width = enemy_small_sprite_source.width;
-				enemy_pool[i].sprite_destination.height = enemy_small_sprite_source.height;
-				enemy_pool[i].position = { 0, 0 };
-				enemy_pool[i].velocity = { 0, 0 };
-			}
-		}
-
-		// Deactivate and clear current enemies so spawn_enemyWave can fill them again
 		for (auto& enemies : enemy_pool) {
 			enemies.active = false;
 			enemies.position = { 0, 0 };
@@ -257,7 +308,6 @@ namespace meteor_blitz
 			enemies.rotation = 0.0f;
 		}
 
-		// Spawn enemies for the current wave (uses enemies_per_wave and waveCount)
 		spawn_enemyWave();
 	}
 
@@ -270,22 +320,14 @@ namespace meteor_blitz
 	}
 
 	void EnemySystem::newWave(){
-		//--- increase enemies per wave & enemy speed ---
 		enemies_per_wave += 2;
-		enemy_speed += 10.0f;
+		enemy_speed += 0.0f;
 
-		//--- resize pool and initialize newly added entries ---
-		std::size_t oldSize = enemy_pool.size();
-		enemy_pool.resize(enemies_per_wave);
-		for (std::size_t i = oldSize; i < enemy_pool.size(); ++i) {
-			enemy_pool[i].active = false;
-			enemy_pool[i].sprite_destination.width = enemy_small_sprite_source.width;
-			enemy_pool[i].sprite_destination.height = enemy_small_sprite_source.height;
-			enemy_pool[i].position = { 0, 0 };
-			enemy_pool[i].velocity = { 0, 0 };
+		// Ensure we never try to spawn more than the pool can hold.
+		if (enemies_per_wave > static_cast<int>(enemy_pool.size())) {
+			enemies_per_wave = static_cast<int>(enemy_pool.size());
 		}
 
-		//--- spawn the new wave ---
 		spawn_enemyWave();
 	}
 
@@ -327,16 +369,20 @@ namespace meteor_blitz
 					collision = CheckCollisionRecs(enemyRectSmall, projRect);
 				}
 				else if (enemyInstance.type == EnemyType::Medium) {
-					collision = CheckCollisionRecs(enemyRectMedium, projRect);
+					collision = CheckCollisionRecs(enemyRectMedium, projRect);					
 				}
 				else { // enemyInstance.type == EnemyType::Large
-					collision = CheckCollisionRecs(enemyRectLarge, projRect);
+					collision = CheckCollisionRecs(enemyRectLarge, projRect);					
 				}
 
 				if (collision) {
 					enemyInstance.active = false;
+					if (enemyInstance.type == EnemyType::Medium || enemyInstance.type == EnemyType::Large) {
+						enemy_splitting(enemyInstance, enemyInstance.type);
+					}
 					projInstance.active = false;
 					PlaySound(enemy_explosion_sound);
+
 					break;
 				}
 			}
