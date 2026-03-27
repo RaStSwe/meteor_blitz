@@ -4,6 +4,7 @@
 
 namespace meteor_blitz
 {
+
 	void EnemySystem::initialize(){
 		//--- Get screen size ---
 		screen_size = { 0,0, (float)GetScreenWidth(),(float)GetScreenHeight() };
@@ -28,7 +29,6 @@ namespace meteor_blitz
 		enemy_large_sprite_origin = { enemy_large_sprite_source.width / 2,enemy_large_sprite_source.height / 2 };
 		enemy_large_sprite_destination = { screen_size.width / 2,screen_size.height / 2,enemy_large_sprite_source.width,enemy_large_sprite_source.height };
 
-
 		//--- Enemy pool setup ---
 		enemy_pool.clear();
 		enemy_pool.resize(enemies_per_wave);
@@ -38,7 +38,7 @@ namespace meteor_blitz
 			enemyInstance.sprite_destination.height = enemy_small_sprite_source.height;
 			enemyInstance.position = { 0, 0 };
 			enemyInstance.velocity = { 0, 0 };
-			});
+		});
 
 		//--- Spawn the first wave ---
 		spawn_enemyWave();
@@ -63,7 +63,7 @@ namespace meteor_blitz
 				else {
 					enemyInstance.type = EnemyType::Small;
 				}
-				
+
 				//--- Set correct size based on enemy type ---
 				if (enemyInstance.type == EnemyType::Medium) {
 					enemyInstance.sprite_destination.width = enemy_medium_sprite_source.width;
@@ -106,7 +106,7 @@ namespace meteor_blitz
 						int spawnY = GetRandomValue(0, (int)screen_size.height);
 						enemyInstance.position.x = screen_size.width + enemyInstance.sprite_destination.width + 10.0f;
 						enemyInstance.position.y = static_cast<float>(spawnY);
-						}
+					}
 				}
 				//--- Medium enemy spawn ---
 				if(enemyInstance.type == EnemyType::Medium) {
@@ -169,19 +169,20 @@ namespace meteor_blitz
 					if (len > 0.0001f) {
 						dir.x /= len;
 						dir.y /= len;
-						enemyInstance.velocity.x = dir.x * (enemy_speed);
-						enemyInstance.velocity.y = dir.y * (enemy_speed);
+						enemyInstance.velocity.x = dir.x * enemy_speed;
+						enemyInstance.velocity.y = dir.y * enemy_speed;
 					}
 					else {
 						float angle = DEG2RAD * static_cast<float>(GetRandomValue(0, 359));
 						enemyInstance.velocity.x = std::cos(angle) * enemy_speed;
 						enemyInstance.velocity.y = std::sin(angle) * enemy_speed;
 					}
-				}else{ //--- randomize direction with thine volocity ---
-				float angleInDeg = static_cast<float>(GetRandomValue(0, 359));
-				float angleInRad = DEG2RAD * angleInDeg;
-				enemyInstance.velocity.x = std::cos(angleInRad) * enemy_speed;
-				enemyInstance.velocity.y = std::sin(angleInRad) * enemy_speed;
+				}
+				else { //--- randomize direction with velocity ---
+					float angleInDeg = static_cast<float>(GetRandomValue(0, 359));
+					float angleInRad = DEG2RAD * angleInDeg;
+					enemyInstance.velocity.x = std::cos(angleInRad) * enemy_speed;
+					enemyInstance.velocity.y = std::sin(angleInRad) * enemy_speed;
 				}
 
 				//--- sync position to destination ---
@@ -209,7 +210,8 @@ namespace meteor_blitz
 	}
 
 	void EnemySystem::enemy_splitting(Enemy& enemy) const {
-
+		// splitting disabled (reverted)
+		(void)enemy;
 	}
 
 	void EnemySystem::reset() {
@@ -226,7 +228,7 @@ namespace meteor_blitz
 		}
 		enemy_speed = 100.0f;
 		waveCount = 1;
-		
+
 		//--- spawn in the first wave ---
 		spawn_enemyWave();
 	}
@@ -290,12 +292,12 @@ namespace meteor_blitz
 	void EnemySystem::checkCollisions(ProjectileSystem& projectiles) {
 		for (auto& enemyInstance : enemy_pool) {
 			if (!enemyInstance.active) continue;
-		
+
 			//--- Enemy Rectangles for collision checks ---
 			Rectangle enemyRectSmall = { 0, 0, 0, 0 };
 			Rectangle enemyRectMedium = { 0, 0, 0, 0 };
 			Rectangle enemyRectLarge = { 0, 0, 0, 0 };
-        
+
 			if (enemyInstance.type == EnemyType::Small || enemyInstance.type == EnemyType::Seeker) {
 				enemyRectSmall = enemyInstance.sprite_destination;
 				enemyRectSmall.x -= enemy_small_sprite_origin.x;
@@ -323,7 +325,7 @@ namespace meteor_blitz
 				bool collision = false;
 				if (enemyInstance.type == EnemyType::Small || enemyInstance.type == EnemyType::Seeker) {
 					collision = CheckCollisionRecs(enemyRectSmall, projRect);
-				} 
+				}
 				else if (enemyInstance.type == EnemyType::Medium) {
 					collision = CheckCollisionRecs(enemyRectMedium, projRect);
 				}
@@ -339,7 +341,7 @@ namespace meteor_blitz
 				}
 			}
 		}
-	}	
+	}
 
 	void EnemySystem::update(float deltaTime, const Vector2& playerPos) {
 		//--- Update all enemies in the pool ---
@@ -380,18 +382,18 @@ namespace meteor_blitz
 		//--- Draw all active enemies ---
 		for (const auto& enemyInstance : enemy_pool) {
 			if (!enemyInstance.active) continue;
-			
+
 			Color tint = (enemyInstance.type == EnemyType::Seeker) ? RED : WHITE;
-			
+
 			if (enemyInstance.type == EnemyType::Medium) {
 				DrawTexturePro(enemy_medium_texture, enemy_medium_sprite_source, enemyInstance.sprite_destination, enemy_medium_sprite_origin, enemyInstance.rotation, tint);
 			}
 			else if (enemyInstance.type == EnemyType::Large) {
 				DrawTexturePro(enemy_large_texture, enemy_large_sprite_source, enemyInstance.sprite_destination, enemy_large_sprite_origin, enemyInstance.rotation, tint);
-			}			
+			}
 			else{
 				DrawTexturePro(enemy_small_texture, enemy_small_sprite_source, enemyInstance.sprite_destination, enemy_small_sprite_origin, enemyInstance.rotation, tint);
-			}			
+			}
 		}
 	}
 
